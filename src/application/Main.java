@@ -5,6 +5,7 @@ import br.com.cej.model.Produto;
 import br.com.cej.screen.menu_screen;
 
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Scanner;
 
 import java.sql.Connection;
@@ -50,13 +51,23 @@ public class Main {
                     break;
                 case 2:
                     ProdutoDAO produtoDAO2 = new ProdutoDAO();
-                    produtoDAO2.Read(connection);
+                    List<Produto> prod = produtoDAO2.Read(connection);
+
+                    for(Produto p: prod){
+                        System.out.println(p.getId());
+                        System.out.println(p.getDescricao());
+                        System.out.println(p.getPrecoCompra());
+                        System.out.println(p.getPrecoVenda());
+                        System.out.println(p.getQuantidadeMinimaEstoque());
+                    }
+
                     break;
                 case 3:
                     System.out.println("Digite o id do produto que deseja atualizar:");
                     Integer id = sc.nextInt();
+                    sc.nextLine();
                     System.out.println("Digite a descrição do produto:");
-                    String descricao2 = sc.next();
+                    String descricao2 = sc.nextLine();
                     System.out.println("Digite a unidade de medida do produto:");
                     String unidadeMedida2 = sc.next();
                     System.out.println("Digite a quantidade mínima do produto:");

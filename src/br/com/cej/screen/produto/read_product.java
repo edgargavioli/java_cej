@@ -4,7 +4,11 @@ import br.com.cej.dao.ProdutoDAO;
 import br.com.cej.model.Produto;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import static db.DB.getConnection;
@@ -30,13 +34,15 @@ public class read_product extends JFrame{
         tableModel.addColumn("Quantidade mínima");
         tableModel.addColumn("Preço de compra");
         tableModel.addColumn("Preço de venda");
+        tableModel.addColumn("Editar");
 
         tableModel.addRow(new Object[]{
                 "Descrição",
                 "Unidade de medida",
                 "Quantidade mínima",
                 "Preço de compra",
-                "Preço de venda"
+                "Preço de venda",
+                "Editar"
         });
 
         itensTable.setModel(tableModel);
@@ -46,14 +52,32 @@ public class read_product extends JFrame{
 
         while (!produtos.isEmpty()) {
             Produto produto = produtos.remove(0);
+
             tableModel.addRow(new Object[]{
                     produto.getDescricao(),
                     produto.getUnidadeMedida(),
                     produto.getQuantidadeMinimaEstoque(),
                     produto.getPrecoCompra(),
                     produto.getPrecoVenda()
+
             });
         }
+
+        itensTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(!e.getValueIsAdjusting()){
+                    int selectedRow = itensTable.getSelectedRow();
+                    if(selectedRow>=0){
+                        String Descricao = (String) tableModel.getValueAt(selectedRow, 0);
+                        String Unidade_Medida = (String) tableModel.getValueAt(selectedRow, 1);
+                        Integer Quantidade_Minima = (Integer) tableModel.getValueAt(selectedRow, 2);
+                        Double Preco_Compra = (Double) tableModel.getValueAt(selectedRow, 3);
+                        Double Preco_Venda = (Double) tableModel.getValueAt(selectedRow, 4);
+                    }
+                }
+            }
+        });
 
         returnButton.addActionListener(elem -> {
             this.dispose();
