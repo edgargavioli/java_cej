@@ -2,7 +2,8 @@ package br.com.cej.screen.produto;
 
 import br.com.cej.dao.ProdutoDAO;
 import br.com.cej.model.Produto;
-import br.com.cej.screen.menu_screen;
+import br.com.cej.model.Categoria;
+import br.com.cej.dao.CategoriaDAO;
 
 import javax.swing.*;
 
@@ -17,14 +18,21 @@ public class create_product extends JFrame {
     private JTextField preco_d_venda;
     private JButton Criar;
     private JButton returnButton;
+    private JComboBox categorias;
 
     public create_product() {
         setContentPane(mainPanel);
         setTitle("Cadastrar produto");
-        setSize(800, 600);
+        setSize(500, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+
+        CategoriaDAO categoriaDAO = new CategoriaDAO();
+
+        for (Categoria categoria : categoriaDAO.Read(getConnection())) {
+            categorias.addItem(categoria.getDescricao());
+        }
 
         Criar.addActionListener(elem -> {
             String descricao = this.descricao.getText();
@@ -42,12 +50,12 @@ public class create_product extends JFrame {
 
             this.dispose();
 
-            new menu_produto();
+            new read_product();
         });
 
         returnButton.addActionListener(elem -> {
             this.dispose();
-            new menu_screen();
+            new read_product();
         });
     }
 }

@@ -3,21 +3,27 @@ package br.com.cej.model;
 public class Fornecedor {
     private Integer id;
     private String nome;
-    private String contato;
     private String cnpj;
     private String endereco;
     private String email;
     private String telefone;
 
-    public Fornecedor(Integer id, String nome, String contato, String cnpj, String endereco, String email, String telefone) {
+    public Fornecedor(Integer id, String nome, String cnpj, String endereco, String email, String telefone) {
         this.id = id;
         this.nome = nome;
-        this.contato = contato;
         this.cnpj = cnpj;
         this.endereco = endereco;
         this.email = email;
         this.telefone = telefone;
     }
+    public Fornecedor(String nome, String cnpj, String endereco, String email, String telefone) {
+        this.nome = nome;
+        this.cnpj = cnpj;
+        this.endereco = endereco;
+        this.email = email;
+        this.telefone = telefone;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -32,14 +38,6 @@ public class Fornecedor {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getContato() {
-        return contato;
-    }
-
-    public void setContato(String contato) {
-        this.contato = contato;
     }
 
     public String getCnpj() {
@@ -100,7 +98,6 @@ public class Fornecedor {
     public String toString() {
         return "Fornecedor{" +
                 "nome='" + nome + '\'' +
-                ", contato='" + contato + '\'' +
                 ", cnpj='" + cnpj + '\'' +
                 ", endereco='" + endereco + '\'' +
                 ", email='" + email + '\'' +
