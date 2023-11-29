@@ -1,5 +1,6 @@
 package br.com.cej.dao;
 
+import br.com.cej.model.Categoria;
 import br.com.cej.model.Funcionario;
 
 import java.sql.Connection;
@@ -38,6 +39,40 @@ public class FuncionarioDAO {
 
             System.out.println("Funcionario salvo com sucesso!");
         }
+    }
+
+    public static Funcionario GetId(Connection connection, Integer id) {
+        String SQL_COMMAND = "SELECT * FROM funcionarios WHERE id = ?";
+        Funcionario funcionario = null;
+        PreparedStatement pstm = null;
+
+        try {
+            pstm = (PreparedStatement) connection.prepareStatement(SQL_COMMAND);
+            pstm.setInt(1, id);
+
+            ResultSet resultSet = pstm.executeQuery();
+
+            while (resultSet.next()) {
+                funcionario = new Funcionario(
+                        resultSet.getInt("id"),
+                        resultSet.getString("nome_acesso"),
+                        resultSet.getString("senha_acesso"),
+                        resultSet.getString("email"),
+                        resultSet.getString("telefone")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstm != null) {
+                    pstm.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return funcionario;
     }
 
     public List<Funcionario> Read(Connection connection) {

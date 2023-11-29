@@ -72,6 +72,38 @@ public class CategoriaDAO {
         return categorias;
     }
 
+    public static Categoria GetId(Connection connection, Integer id) {
+        String SQL_COMMAND = "SELECT * FROM categorias WHERE id = ?";
+        Categoria categoria = null;
+        PreparedStatement pstm = null;
+
+        try {
+            pstm = (PreparedStatement) connection.prepareStatement(SQL_COMMAND);
+            pstm.setInt(1, id);
+
+            ResultSet resultSet = pstm.executeQuery();
+
+            while (resultSet.next()) {
+                categoria = new Categoria(
+                        resultSet.getInt("id"),
+                        resultSet.getString("nome"),
+                        resultSet.getString("descricao")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstm != null) {
+                    pstm.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return categoria;
+    }
+
     public void Update(Categoria categoria, Connection connection) {
         String SQL_COMMAND = "UPDATE categorias SET nome = ?, descricao = ? WHERE id = ?";
 

@@ -8,7 +8,6 @@ public class Funcionario {
     private String senha;
     private String email;
     private String telefone;
-    private int nivelAcesso;
 
     public Funcionario( Integer id, String nome, String senha, String email, String telefone) {
         this.id = id;
@@ -22,13 +21,6 @@ public class Funcionario {
         this.senha = senha;
         this.email = email;
         this.telefone = telefone;
-    }
-    public Funcionario(String nome, String senha, String email, String telefone, int nivelAcesso) {
-        this.nome = nome;
-        this.senha = senha;
-        this.email = email;
-        this.telefone = telefone;
-        this.nivelAcesso = nivelAcesso;
     }
 
     public Integer getId() {
@@ -65,14 +57,6 @@ public class Funcionario {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public int getNivelAcesso() {
-        return nivelAcesso;
-    }
-
-    public void setNivelAcesso(int nivelAcesso) {
-        this.nivelAcesso = nivelAcesso;
     }
 
     @Override

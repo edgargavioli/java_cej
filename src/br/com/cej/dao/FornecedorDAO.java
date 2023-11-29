@@ -1,5 +1,6 @@
 package br.com.cej.dao;
 
+import br.com.cej.model.Categoria;
 import br.com.cej.model.Fornecedor;
 
 import java.sql.Connection;
@@ -38,6 +39,41 @@ public class FornecedorDAO {
 
             System.out.println("Fornecedor salvo com sucesso!");
         }
+    }
+
+    public static Fornecedor GetId(Connection connection, Integer id) {
+        String SQL_COMMAND = "SELECT * FROM fornecedores WHERE id = ?";
+        Fornecedor fornecedor = null;
+        PreparedStatement pstm = null;
+
+        try {
+            pstm = (PreparedStatement) connection.prepareStatement(SQL_COMMAND);
+            pstm.setInt(1, id);
+
+            ResultSet resultSet = pstm.executeQuery();
+
+            while (resultSet.next()) {
+                fornecedor = new Fornecedor(
+                        resultSet.getInt("id"),
+                        resultSet.getString("nome"),
+                        resultSet.getString("cnpj"),
+                        resultSet.getString("endereco"),
+                        resultSet.getString("email"),
+                        resultSet.getString("telefone")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstm != null) {
+                    pstm.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return fornecedor;
     }
 
     public List<Fornecedor> Read(Connection connection) {

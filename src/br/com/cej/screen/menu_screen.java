@@ -4,6 +4,7 @@ import br.com.cej.screen.fornecedor.read_fornecedor;
 import br.com.cej.screen.funcionario.read_funcionario;
 import br.com.cej.screen.produto.read_product;
 import br.com.cej.screen.categoria.read_categoria;
+import br.com.cej.screen.venda.read_venda;
 
 import javax.swing.*;
 
@@ -13,6 +14,7 @@ public class menu_screen extends JFrame{
     private JButton funcionariosButton;
     private JButton categoriasButton;
     private JButton fornecedoresButton;
+    private JButton vendasButton;
 
     public menu_screen() {
         setContentPane(menu_screen);
@@ -40,6 +42,11 @@ public class menu_screen extends JFrame{
         fornecedoresButton.addActionListener(elem -> {
             this.dispose();
             new read_fornecedor();
+        });
+
+        vendasButton.addActionListener(elem -> {
+            this.dispose();
+            new read_venda();
         });
     }
 }

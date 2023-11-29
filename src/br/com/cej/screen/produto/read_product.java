@@ -1,6 +1,7 @@
 package br.com.cej.screen.produto;
 
 import br.com.cej.dao.ProdutoDAO;
+import br.com.cej.model.Categoria;
 import br.com.cej.model.Produto;
 import br.com.cej.screen.menu_screen;
 
@@ -34,6 +35,9 @@ public class read_product extends JFrame{
         tableModel.addColumn("Quantidade mínima");
         tableModel.addColumn("Preço de compra");
         tableModel.addColumn("Preço de venda");
+        tableModel.addColumn("Categoria");
+        tableModel.addColumn("Fornecedor");
+        tableModel.addColumn("Funcionário");
 
         tableModel.addRow(new Object[]{
                 "ID",
@@ -41,13 +45,16 @@ public class read_product extends JFrame{
                 "Unidade de medida",
                 "Quantidade mínima",
                 "Preço de compra",
-                "Preço de venda"
+                "Preço de venda",
+                "Categoria",
+                "Fornecedor",
+                "Funcionário"
         });
 
         itensTable.setModel(tableModel);
 
-        ProdutoDAO ProdutoDAO = new ProdutoDAO();
-        List<Produto> produtos = ProdutoDAO.Read(getConnection());
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        List<Produto> produtos = produtoDAO.Read(getConnection());
 
         while (!produtos.isEmpty()) {
             Produto produto = produtos.remove(0);
@@ -57,7 +64,10 @@ public class read_product extends JFrame{
                     produto.getUnidadeMedida(),
                     produto.getQuantidadeMinimaEstoque(),
                     produto.getPrecoCompra(),
-                    produto.getPrecoVenda()
+                    produto.getPrecoVenda(),
+                    produto.getCategoria().getDescricao(),
+                    produto.getFornecedor().getNome(),
+                    produto.getFuncionario().getNome()
             });
         }
 
@@ -71,13 +81,7 @@ public class read_product extends JFrame{
                 int selectedRow = itensTable.rowAtPoint(evt.getPoint());
                 if (selectedRow >= 0) {
                     Integer id = (Integer) itensTable.getValueAt(selectedRow, 0);
-                    String descricao = (String) itensTable.getValueAt(selectedRow, 1);
-                    String unidadeMedida = (String) itensTable.getValueAt(selectedRow, 2);
-                    Integer quantidadeMinimaEstoque = (Integer) itensTable.getValueAt(selectedRow, 3);
-                    Double precoCompra = (Double) itensTable.getValueAt(selectedRow, 4);
-                    Double precoVenda = (Double) itensTable.getValueAt(selectedRow, 5);
-
-                    Produto produto = new Produto(id, descricao, unidadeMedida, quantidadeMinimaEstoque, precoCompra, precoVenda);
+                    Produto produto = ProdutoDAO.GetId(id, getConnection());
                     new update_product(produto);
                     dispose();
                 }
