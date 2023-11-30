@@ -27,7 +27,7 @@ public class read_venda_produto extends JFrame{
         setVisible(true);
 
         voltar.addActionListener(elem -> {
-            dispose();
+            this.dispose();
             new read_venda();
         });
 
@@ -46,8 +46,8 @@ public class read_venda_produto extends JFrame{
         itensVendidos.setModel(model);
 
         deletarButton.addActionListener(elem -> {
-            venda_produtoDAO.Delete(id, getConnection());
-            dispose();
+            venda_produtoDAO.Delete(id, venda_produtos,getConnection());
+            this.dispose();
             new read_venda();
         });
 

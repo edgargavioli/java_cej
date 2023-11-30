@@ -62,6 +62,7 @@ public class read_venda extends JFrame {
                 if (selectedRow >= 0) {
                     Integer id = Integer.parseInt(vendasTable.getModel().getValueAt(selectedRow, 0).toString());
                     new read_venda_produto(id);
+                    dispose();
                 }
             }
         });

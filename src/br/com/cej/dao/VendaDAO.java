@@ -211,7 +211,7 @@ public class VendaDAO {
         return vendas;
     }
 
-    public void Delete(Integer id, Connection connection){
+    public void Delete(Integer id, List<Venda_Produto> venda_produtos,Connection connection){
         String SQL_COMMAND = "DELETE FROM vendas WHERE id = ?";
         String SQL_COMMAND2 = "DELETE FROM vendas_itens WHERE id_venda = ?";
 
@@ -219,10 +219,13 @@ public class VendaDAO {
         PreparedStatement pstm2 = null;
 
         try {
+            for (Venda_Produto venda_produto : venda_produtos) {
+                pstm2 = (PreparedStatement) connection.prepareStatement(SQL_COMMAND2);
+                pstm2.setInt(1,venda_produto.getVenda().getId());
+                pstm2.execute();
+            }
             pstm = (PreparedStatement) connection.prepareStatement(SQL_COMMAND);
             pstm.setInt(1, id);
-            pstm2 = (PreparedStatement) connection.prepareStatement(SQL_COMMAND2);
-            pstm2.setInt(1, id);
 
             pstm.execute();
         } catch (Exception e) {

@@ -63,6 +63,7 @@ CREATE TABLE vendas(
 );
 
 CREATE TABLE vendas_itens(
+	id INT AUTO_INCREMENT PRIMARY KEY,
 	quantidade INT NOT NULL,
     id_venda INT NOT NULL,
     id_item INT NOT NULL,
@@ -72,5 +73,5 @@ CREATE TABLE vendas_itens(
     CONSTRAINT item_fk
     FOREIGN KEY(id_item)
     REFERENCES itens(id),
-    PRIMARY KEY(id_venda, id_item)
+    UNIQUE KEY(id_venda, id_item)
 );
