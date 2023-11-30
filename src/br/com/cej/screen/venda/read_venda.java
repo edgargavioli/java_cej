@@ -14,7 +14,7 @@ import static db.DB.getConnection;
 public class read_venda extends JFrame {
     private JButton voltarButton;
     private JButton novaVendaButton;
-    private JTable vendas;
+    private JTable vendasTable;
     private JPanel read_venda;
 
     public read_venda() {
@@ -39,7 +39,7 @@ public class read_venda extends JFrame {
                 "Funcionário"
         });
 
-        vendas.setModel(tableModel);
+        vendasTable.setModel(tableModel);
 
         VendaDAO vendaDAO = new VendaDAO();
         List<Venda> vendas = vendaDAO.Read(getConnection());
@@ -54,6 +54,17 @@ public class read_venda extends JFrame {
                     venda.getFuncionario().getNome()
             });
         }
+
+        vendasTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int selectedRow = vendasTable.rowAtPoint(evt.getPoint());
+                if (selectedRow >= 0) {
+                    Integer id = Integer.parseInt(vendasTable.getModel().getValueAt(selectedRow, 0).toString());
+                    new read_venda_produto(id);
+                }
+            }
+        });
 
         novaVendaButton.addActionListener(elem -> {
             this.dispose();

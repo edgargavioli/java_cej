@@ -12,7 +12,7 @@ import java.util.List;
 
 public class VendaDAO {
     public void Save(Venda venda, Connection connection){
-        String SQL_COMMAND = "INSERT INTO vendas(data_v, valor_total, id_funcionario) VALUES(?, ?, ?)";
+        String SQL_COMMAND = "INSERT INTO vendas(data_v, valor_total, id_funcionario, id) VALUES(?, ?, ?, ?)";
 
         PreparedStatement pstm = null;
 
@@ -21,6 +21,7 @@ public class VendaDAO {
             pstm.setDate(1, Date.valueOf(venda.getData()));
             pstm.setDouble(2, venda.getValorTotal());
             pstm.setInt(3, venda.getFuncionario().getId());
+            pstm.setInt(4, venda.getId());
 
             pstm.execute();
         } catch (Exception e) {
@@ -107,16 +108,20 @@ public class VendaDAO {
         return vendas;
     }
 
-    public void SaveProdutosVenda(Venda_Produto venda, Connection connection){
-        String SQL_COMMAND = "INSERT INTO produtos_venda(id_venda, id_produto, quantidade_prod) VALUES(?, ?, ?)";
+    public void SaveProdutosVenda(List<Venda_Produto> venda, Integer id, Connection connection){
+        String SQL_COMMAND = "INSERT INTO vendas_itens(id_venda, id_item, quantidade) VALUES(?, ?, ?)";
 
         PreparedStatement pstm = null;
 
         try {
             pstm = (PreparedStatement) connection.prepareStatement(SQL_COMMAND);
-            pstm.setInt(1, venda.getId());
-            pstm.setInt(2, venda.getProduto().getId());
-            pstm.setInt(3, venda.getQuantidade());
+            for (Venda_Produto venda_produto : venda) {
+                pstm.setInt(1, id);
+                pstm.setInt(2, venda_produto.getProduto().getId());
+                pstm.setInt(3, venda_produto.getQuantidade());
+
+                pstm.execute();
+            }
 
             pstm.execute();
         } catch (Exception e) {
@@ -149,8 +154,9 @@ public class VendaDAO {
             while (resultSet.next()) {
                 venda = new Venda(
                         resultSet.getInt("id"),
-                        resultSet.getDate("data").toLocalDate(),
-                        resultSet.getDouble("valor_total")
+                        resultSet.getDate("data_v").toLocalDate(),
+                        resultSet.getDouble("valor_total"),
+                        resultSet.getInt("id_funcionario")
                 );
             }
         } catch (Exception e) {
@@ -169,9 +175,9 @@ public class VendaDAO {
     }
 
     public List<Venda_Produto> GetAllVendas(Integer id, Connection connection){
-        String SQL_COMMAND = "SELECT * FROM produtos_venda WHERE id_venda = ?";
+        String SQL_COMMAND = "SELECT * FROM vendas_itens WHERE id_venda = ?";
 
-        List<Venda_Produto> vendas = null;
+        ArrayList<Venda_Produto> vendas = new ArrayList<Venda_Produto>();
 
         PreparedStatement pstm = null;
 
@@ -186,7 +192,7 @@ public class VendaDAO {
                         resultSet.getInt("id"),
                         resultSet.getInt("quantidade"),
                         resultSet.getInt("id_venda"),
-                        resultSet.getInt("id_produto")
+                        resultSet.getInt("id_item")
                 );
                 vendas.add(venda);
             }
@@ -206,14 +212,17 @@ public class VendaDAO {
     }
 
     public void Delete(Integer id, Connection connection){
-        String SQL_COMMAND = "DELETE FROM vendas WHERE id = ? AND DELETE FROM produtos_venda WHERE id_venda = ?";
+        String SQL_COMMAND = "DELETE FROM vendas WHERE id = ?";
+        String SQL_COMMAND2 = "DELETE FROM vendas_itens WHERE id_venda = ?";
 
         PreparedStatement pstm = null;
+        PreparedStatement pstm2 = null;
 
         try {
             pstm = (PreparedStatement) connection.prepareStatement(SQL_COMMAND);
             pstm.setInt(1, id);
-            pstm.setInt(2, id);
+            pstm2 = (PreparedStatement) connection.prepareStatement(SQL_COMMAND2);
+            pstm2.setInt(1, id);
 
             pstm.execute();
         } catch (Exception e) {

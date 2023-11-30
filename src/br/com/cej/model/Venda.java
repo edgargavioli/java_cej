@@ -77,4 +77,8 @@ public class Venda {
         this.valorTotal += valorTotal;
     }
 
+    public void setValorTotalToSubtract(Double valorTotal) {
+        this.valorTotal -= valorTotal;
+    }
+
 }
